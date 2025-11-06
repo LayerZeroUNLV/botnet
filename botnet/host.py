@@ -204,6 +204,7 @@ print(YELLOW + "[+] Type 'help' for a list of available commands" + RESET)  # Hi
 thread = threading.Thread(target=server)                    # Create a background worker that will run the 'server' function
 thread.start()                                              # Start that background worker (now it's watching for connections!)
 
+
 # ============================================================================================
 # MAIN COMMAND CENTER
 # ============================================================================================

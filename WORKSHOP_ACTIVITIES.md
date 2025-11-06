@@ -1,4 +1,4 @@
-### 1. System Reconnaissance
+### System Reconnaissance
 ```bash
 # See what user the victim is running as
 Shell#: whoami
@@ -18,8 +18,10 @@ Shell#: uptime
 # Check disk usage
 Shell#: df -h
 ```
+---
 
-### 2. Process Exploration
+
+### Process Exploration
 ```bash
 # See all running processes
 Shell#: ps aux
@@ -34,8 +36,10 @@ Shell#: ps aux | wc -l
 Shell#: pstree  # Linux
 Shell#: ps -ef  # macOS alternative
 ```
+---
 
-### 3. Network Snooping
+
+### Network Snooping
 ```bash
 # See all network connections
 Shell#: netstat -an
@@ -52,11 +56,13 @@ Shell#: netstat -an | grep LISTEN
 # Get all network interfaces and IPs
 Shell#: ifconfig
 ```
+---
 
-### 4. File System Fun
+
+### File System Fun
 ```bash
 # Create a secret file
-Shell#: echo "I was here!" > .hidden_file.txt
+Shell#: echo "H3LL0_TH3R3_STR4NG3R" > .hidden_file.txt
 
 # List all files including hidden ones
 Shell#: ls -la
@@ -75,8 +81,10 @@ Shell#: find . -name "*.txt"
 Shell#: rev timestamp.txt  # Linux
 Shell#: tail -r timestamp.txt  # macOS
 ```
+---
 
-### 5. Creative Text Manipulation
+
+### Creative Text Manipulation
 ```bash
 # Create ASCII art file
 Shell#: echo "  ___  " > robot.txt
@@ -86,7 +94,7 @@ Shell#: echo " ----- " >> robot.txt
 Shell#: cat robot.txt
 
 # Create a simple "ransom note"
-Shell#: echo "Your files have been... borrowed!" > note.txt
+Shell#: echo "G0T_Y0UR_F1LES!" > note.txt
 Shell#: cat note.txt
 
 # Count words in a file
@@ -95,8 +103,10 @@ Shell#: wc -w /etc/hosts
 # Display file with line numbers
 Shell#: cat -n /etc/hosts
 ```
+---
 
-### 6. System Information Hunt
+
+### System Information Hunt
 ```bash
 # See current date and time
 Shell#: date
@@ -116,14 +126,16 @@ Shell#: last | head -10
 # Display system info (macOS)
 Shell#: system_profiler SPHardwareDataType
 ```
+---
 
-### 7. Fun with Output
+
+### Fun with Output
 ```bash
 # Create a countdown
-Shell#: for i in 5 4 3 2 1; do echo $i; sleep 1; done; echo "Botnet activated!"
+Shell#: for i in 5 4 3 2 1; do echo $i; sleep 1; done; echo "BOTNET GO!"
 
 # Display a message repeatedly
-Shell#: yes "Hacked!" | head -5
+Shell#: yes "ERROR!" | head -5
 
 # Generate random numbers
 Shell#: echo $RANDOM
@@ -132,10 +144,12 @@ Shell#: echo $RANDOM
 Shell#: echo "Hello" | od -A n -t d1
 
 # Print colored text (if terminal supports it)
-Shell#: echo -e "\033[31mRed Text\033[0m"
+Shell#: echo -e "\033[31mD00M5D4Y_2077\033[0m"
 ```
+---
 
-### 8. File Download/Upload Practice
+
+### File Download/Upload Practice
 ```bash
 # Download the hosts file
 Shell#: download /etc/hosts
@@ -148,8 +162,10 @@ Shell#: download assignment.txt
 Shell#: upload test.txt
 Shell#: cat test.txt
 ```
+---
 
-### 9. Search and Discovery
+
+### Search and Discovery
 ```bash
 # Find files modified in last 24 hours
 Shell#: find . -mtime -1
@@ -166,8 +182,10 @@ Shell#: head -5 /etc/hosts
 # Show last 5 lines of a file
 Shell#: tail -5 /etc/hosts
 ```
+---
 
-### 10. Combining Commands (Advanced)
+
+### Combining Commands (Advanced)
 ```bash
 # Chain multiple commands
 Shell#: whoami && hostname && date
